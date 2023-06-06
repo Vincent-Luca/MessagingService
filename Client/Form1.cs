@@ -39,7 +39,7 @@ namespace Client
 
         private void button1_Click(object sender, EventArgs e)
         {
-            client.WriteLine(textBox1.Text);
+            client.Write(textBox1.Text);
         }
     }
 }
