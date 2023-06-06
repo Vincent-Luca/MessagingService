@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Net.Sockets;
 using SimpleTCP;
 using SimpleTCP.Server;
+using Server.Helpers;
 
 namespace Server
 {
@@ -16,83 +17,75 @@ namespace Server
         private static ServerMain _instance;
         public static ServerMain Instance => _instance;
 
+        private static DBConnection _dbConnection;
+        public static DBConnection DBConnection => _dbConnection;
+
         public const string Version = "0.1.1";
 
-        private SimpleTcpServer _server;
+        private static SimpleTcpServer _server;
 
-        public SimpleTcpServer Server => _server;
+        public static SimpleTcpServer Server => _server;
 
-        private static Dictionary<string, SimpleTcpClient> _clients;
-        public static Dictionary<string, SimpleTcpClient> clients => _clients;
+        private static ConnectionManager _connectionManaging;
+        public static ConnectionManager ConnectionManaging => _connectionManaging;
 
+        private static List<Client> _clients;
+        public static List<Client> clients => _clients;
+
+        private static MessageManager _messageManager;
+        public static MessageManager MessageManager => _messageManager;
+
+        public const int port = 8888;
 
         public ServerMain()
         {
             _server = new SimpleTcpServer();
 
-            _clients = new Dictionary<string, SimpleTcpClient>();
+            _connectionManaging = new ConnectionManager();
+
+            _messageManager = new MessageManager();
+
+            _dbConnection = new DBConnection("Data Source=localhost;Initial Catalog=Messsaging_Service;Persist Security Info=True;User ID=sa;Password=supersecretpassword");
+
+            _clients = new List<Client>();
 
             _server.ClientConnected += Server_ClientConnected;
 
-            _server.ClientDisconnected += Server_ClientConnected;
+            _server.ClientDisconnected += Server_ClientDisconnected;
 
             _server.DataReceived += Server_DataReceived;
 
-            _server.Delimiter = 0x13; // Message delimiter
+            _server.Delimiter = 0x13;
             _server.StringEncoder = Encoding.UTF8;
 
-            int port = 8888; // Replace with the desired server port
             _server.Start(port);
 
             Console.WriteLine("Server started. Listening for incoming connections on port " + port);
             Console.ReadLine();
 
-            _server.Stop();
-        }
-
-        public void start()
-        {
-            
+            stop();
         }
 
         public void stop()
         {
-
+            _server.Stop();
         }
 
         static void Server_DataReceived(object sender, Message e)
         {
-            var receivedMessage = e.MessageString;
+            string receivedMessage = e.MessageString;
             Console.WriteLine("Received message: " + receivedMessage);
 
-            // Process and handle the received message
+            string[] MessageParts = receivedMessage.Split('/');
 
-            // Example: Sending a message to a specific client
-            if (receivedMessage.StartsWith("@"))
+            switch (MessageParts[0]) 
             {
-                string[] parts = receivedMessage.Split(new[] { ' ' }, 2);
-                if (parts.Length == 2)
-                {
-                    string clientId = parts[0].Substring(1);
-                    string message = parts[1];
+                case "Message":
+                    _messageManager.MessageFromTo(MessageParts);
+                    break;
 
-                    if (clients.TryGetValue(clientId, out var client))
-                    {
-                        client.Write(message);
-                    }
-                    else
-                    {
-                        Console.WriteLine("Client not found: " + clientId);
-                    }
-                }
-            }
-            else
-            {
-                // Echo the message back to all clients
-                foreach (var client in clients.Values)
-                {
-                    client.Write(receivedMessage);
-                }
+                default:
+                    break;
             }
         }
 
@@ -100,22 +93,20 @@ namespace Server
         {
             Console.WriteLine("Client connected: " + e.Client.RemoteEndPoint);
 
-            string REP = e.Client.RemoteEndPoint.ToString();
-            string[] splitREP = REP.Split(':');
-            SimpleTcpClient client = new SimpleTcpClient().Connect(splitREP[0], Convert.ToInt32(splitREP[1]));
+            _connectionManaging.Write($"ConnectionConfirmation/{e.Client.RemoteEndPoint}",e);
 
-            client.StringEncoder = Encoding.UTF8;
-            client.Write("Test222");
-            clients.Add(e.Client.RemoteEndPoint.ToString(), client);
-
+            Client client = new Client();
+            client.ConnectionState = ConnectionStateClient.Connected;
+            client._client = e;
+            client.RemoteEndPoint = e.Client.RemoteEndPoint.ToString();
+            _clients.Add(client);
         }
 
-        static void Server_ClientDisconnected(object sender, System.Net.Sockets.TcpClient e)
+        static void Server_ClientDisconnected(object sender, TcpClient e)
         {
             Console.WriteLine("Client disconnected: " + e.Client.RemoteEndPoint);
 
-            // Remove the SimpleTcpClient for the disconnected client from the clients dictionary
-            clients.Remove(e.Client.RemoteEndPoint.ToString());
+            _clients.Remove(_clients.Find(x => x.RemoteEndPoint == e.Client.RemoteEndPoint.ToString()));
         }
 
         public static ServerMain CreateOrGetInstance()

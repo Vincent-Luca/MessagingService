@@ -14,7 +14,6 @@ namespace Server
 
             Console.WriteLine($"Starting server application now (v{ServerMain.Version})");
             ServerMain main = ServerMain.CreateOrGetInstance();
-            main.start();
         }
     }
 }
