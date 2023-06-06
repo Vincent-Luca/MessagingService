@@ -5,6 +5,7 @@ using System.Security.Policy;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Net.Sockets;
 using SimpleTCP;
 using SimpleTCP.Server;
 
@@ -95,14 +96,16 @@ namespace Server
             }
         }
 
-        static void Server_ClientConnected(object sender, System.Net.Sockets.TcpClient e)
+        static void Server_ClientConnected(object sender, TcpClient e)
         {
             Console.WriteLine("Client connected: " + e.Client.RemoteEndPoint);
 
-            // Create a new SimpleTcpClient for the connected client and add it to the clients dictionary
-            var client = new SimpleTcpClient();
-            client.StringEncoder = Encoding.UTF8;
+            string REP = e.Client.RemoteEndPoint.ToString();
+            string[] splitREP = REP.Split(':');
+            SimpleTcpClient client = new SimpleTcpClient().Connect(splitREP[0], Convert.ToInt32(splitREP[1]));
 
+            client.StringEncoder = Encoding.UTF8;
+            client.Write("Test222");
             clients.Add(e.Client.RemoteEndPoint.ToString(), client);
 
         }
