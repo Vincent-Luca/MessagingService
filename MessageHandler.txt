@@ -1,0 +1,40 @@
+Server:
+
+Login:
+    "Login/Username/Password"
+
+CreateUser:
+    "CreateUser/Username/Password"
+
+TextMessage:
+    "TextMessage/SenderID/ReceiverID/Message"
+
+AudioMessage:
+    "AudioMessage/SenderID/ReceiverID/AudioBytes"
+
+VideoMessage:
+    "VideoMessage/SenderID/ReceiverID/VideoBytes"
+
+SendFriendRequest:
+    "FriendRequest/SenderID/ReceiverID"
+
+AccpetFriendRequest:
+    "AccpetFriendRequest/SenderID/ReceiverID"
+
+DeclineFriendRequest:
+    "DeclineFriendRequest/SenderID/ReceiverID"
+
+GroupChatTextMessage:
+    "GroupChatTextMessage/SenderID/GroupID/Message"
+
+GroupChatAudioMessage:
+    "GroupChatAudioMessage/SenderID/GroupID/AudioBytes"
+
+GroupChatVideoMessage:
+    "GroupChatVideoMessage/SenderID/GroupID/VideoBytes"
+
+ChatLoadRequest:
+    "ChatLoadRequest/SenderID/ReceiverID"
+
+
+Client:

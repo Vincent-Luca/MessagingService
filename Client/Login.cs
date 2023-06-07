@@ -15,6 +15,7 @@ namespace Client
     {
         private static SimpleTcpClient _client = new SimpleTcpClient();
         public static SimpleTcpClient Client => _client;
+
         private static Login _instance;
         public static Login Instance => _instance;
 
