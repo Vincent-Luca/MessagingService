@@ -18,7 +18,7 @@ namespace Server.Helpers
         public TcpClient _client;
         public int Port => Convert.ToInt32(RemoteEndPoint.Split(':')[1]);
         public string IP => RemoteEndPoint.Split(':')[0];
-        public int UserID;
+        public int? UserID = null;
         public ConnectionStateClient ConnectionState;
 
         public Client()

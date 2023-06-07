@@ -83,15 +83,29 @@ namespace Server
                         loop = false;
                         break;
 
-                    case "Show":
-                        if (inputpart.Length == 1)
+                    case "show":
+                        if (inputpart.Length < 2)
                         {
-                            Console.WriteLine("Please finish your command");
+                            Console.WriteLine("Invalid Command length");
                             break;
                         }
-                        switch (inputpart[1])
+                        switch (inputpart[1].ToLower())
                         {
+                            case "clients":
+                                for (int i = 0; i < _clients.Count; i++)
+                                {
+                                    Console.WriteLine("--------------");
+                                    Console.WriteLine("UserID: " + _clients[i].UserID == null ? _clients[i].UserID.ToString() : "N/A");
+                                    Console.WriteLine(_clients[i].RemoteEndPoint);
+                                    Console.WriteLine(_clients[i].ConnectionState.ToString());
+                                    Console.WriteLine("--------------");
+
+
+                                }
+                                break;
+
                             default:
+                                Console.WriteLine("Invalid Command");
                                 break;
                         }
                         break;

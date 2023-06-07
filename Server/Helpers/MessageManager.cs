@@ -21,7 +21,7 @@ namespace Server.Helpers
                 return;
 
             int UserID = int.Parse(ServerMain.Instance.DBConnection.SQLSelect($"Select * from Users where Username = '{MessageParts[1]}' and Password = '{MessageParts[2]}';").Rows[0][0].ToString());
-
+            
             ServerMain.Instance.ConnectionManaging.Write("LoginConfirmation", ServerMain.Instance.clients.Find(x => x.UserID == UserID)._client);
         }
         public void CreateUser(string[] MessageParts)
