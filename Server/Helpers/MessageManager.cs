@@ -1,6 +1,7 @@
 ﻿using SimpleTCP;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -17,24 +18,12 @@ namespace Server.Helpers
 
         public void Login(string[] MessageParts)
         {
-            if (!ServerMain.Instance.DBConnection.isAvailable($"Select * from Users where Username = '{MessageParts[1]}' and Password = '{MessageParts[2]}';"))
-                return;
-
             int UserID = int.Parse(ServerMain.Instance.DBConnection.SQLSelect($"Select * from Users where Username = '{MessageParts[1]}' and Password = '{MessageParts[2]}';").Rows[0][0].ToString());
             
-            ServerMain.Instance.ConnectionManaging.Write("LoginConfirmation", ServerMain.Instance.clients.Find(x => x.UserID == UserID)._client);
+            ServerMain.Instance.ConnectionManaging.Write($"LoginSuccess/{UserID}", ServerMain.Instance.clients.Find(x => x.UserID == UserID)._client);
         }
         public void CreateUser(string[] MessageParts)
         {
-            int UserID;
-            if (ServerMain.Instance.DBConnection.executenonquery($"Select * from Users where Username = '{MessageParts[1]}';"))
-            {
-                UserID = int.Parse(ServerMain.Instance.DBConnection.SQLSelect($"Select * from Users where Username = '{MessageParts[1]}' and Password = '{MessageParts[2]}';").Rows[0][0].ToString());
-
-                ServerMain.Instance.ConnectionManaging.Write("CreateUserFailed/User already exists", ServerMain.Instance.clients.Find(x => x.UserID == UserID)._client);
-                return;
-            }
-
             int NewUserID = int.Parse(ServerMain.Instance.DBConnection.SQLSelect("Select TOP(1) UserID from Users order by USerID desc;").Rows[0][0].ToString()) + 1;
 
             Dictionary<string, dynamic> args = new Dictionary<string, dynamic>()
@@ -45,10 +34,6 @@ namespace Server.Helpers
             };
 
             ServerMain.Instance.DBConnection.executenonquery("Insert into Users(UserID,Username,Password) Values(@UID,@UN,@Pass);", args);
-
-            UserID = int.Parse(ServerMain.Instance.DBConnection.SQLSelect($"Select * from Users where Username = '{MessageParts[1]}' and Password = '{MessageParts[2]}';").Rows[0][0].ToString());
-            ServerMain.Instance.ConnectionManaging.Write("CreateUserSuccess", ServerMain.Instance.clients.Find(x => x.UserID == UserID)._client);
-
         }
 
         public void TextMessage(string[] MessageParts)
@@ -67,6 +52,12 @@ namespace Server.Helpers
 
             ServerMain.Instance.DBConnection.executenonquery("Insert into Messages(MessageID, SenderID, ReceiverID,MessageType,MessageContent,SentDateTime) Values(@MID,@SID,@RID,@MT,@MC,@Date);", args);
 
+            if (!ServerMain.Instance.clients.Any(X => X.UserID == int.Parse(MessageParts[2])))
+            {
+                return;
+            }
+
+            ServerMain.Instance.ConnectionManaging.Write($"NewMessage/{MessageParts[1]}/{MessageParts[3]}",ServerMain.Instance.clients.Find(x => x.UserID == int.Parse(MessageParts[2]))._client);
         }
         public void AudioMessage(string[] MessageParts)
         {
@@ -91,6 +82,13 @@ namespace Server.Helpers
             args.Add("@AData", MessageParts[3]);
 
             ServerMain.Instance.DBConnection.executenonquery("Insert into Audios(AudioID, MessageID, AudioData) Values(@AID,@MID,@AData);", args);
+
+            if (!ServerMain.Instance.clients.Any(X => X.UserID == int.Parse(MessageParts[2])))
+            {
+                return;
+            }
+
+            ServerMain.Instance.ConnectionManaging.Write($"NewMessage/{MessageParts[1]}/{MessageParts[3]}", ServerMain.Instance.clients.Find(x => x.UserID == int.Parse(MessageParts[2]))._client);
         }
         public void VideoMessage(string[] MessageParts)
         {
@@ -115,6 +113,13 @@ namespace Server.Helpers
             args.Add("@VData", MessageParts[3]);
             
             ServerMain.Instance.DBConnection.executenonquery("Insert into Videos(VideoID, MessageID, VideoData) Values(@VID,@MID,@VData);", args);
+
+            if (!ServerMain.Instance.clients.Any(X => X.UserID == int.Parse(MessageParts[2])))
+            {
+                return;
+            }
+
+            ServerMain.Instance.ConnectionManaging.Write($"NewMessage/{MessageParts[1]}/{MessageParts[3]}", ServerMain.Instance.clients.Find(x => x.UserID == int.Parse(MessageParts[2]))._client);
         }
         public void SendFriendRequest(string[] MessageParts)
         {

@@ -124,6 +124,7 @@ namespace Server
         private void Server_DataReceived(object sender, Message e)
         {
             string receivedMessage = e.MessageString;
+            
             Console.WriteLine("Received message: " + receivedMessage);
 
             string[] MessageParts = receivedMessage.Split('/');
@@ -131,49 +132,101 @@ namespace Server
             switch (MessageParts[0]) 
             {
                 case "Login":
+
+                    if (!_dbConnection.isAvailable($"Select * from Users where Username = '{MessageParts[1]}' and Password = '{MessageParts[2]}';"))
+                    {
+                        e.ReplyLine("LoginFailure/No_Account_with_this_Username_or_Password");
+                        break;
+                    }
+                    _clients.Find(x => x.RemoteEndPoint == e.TcpClient.Client.RemoteEndPoint.ToString()).UserID = int.Parse(_dbConnection.SQLSelect($"Select UserID from Users where Username = '{MessageParts[1]}' and Password = '{MessageParts[2]}';").Rows[0][0].ToString());
+
                     Thread Login = new Thread(() => _messageManager.Login(MessageParts));
                     Login.Start();
+
                     break;
+
+
                 case "CreateUser:":
+
+                    if (_dbConnection.isAvailable($"Select * from Users where Username = '{MessageParts[1]}';"))
+                    {
+                        e.ReplyLine("CreateAccountFailure/Account_with_this_Username_already_exists");
+                        break;
+                    }
+
                     Thread CreateUser = new Thread(() => _messageManager.CreateUser(MessageParts));
                     CreateUser.Start();
+
+                    CreateUser.Join();
+
+                    e.ReplyLine("CreateAccountSuccess");
+                    
                     break;
+
+
                 case "TextMessage":
+
+                    
+
                     Thread TextMessage = new Thread(() => _messageManager.TextMessage(MessageParts));
                     TextMessage.Start();
                     break;
+
+
                 case "AudioMessage:":
                     Thread AudioMessage = new Thread(() => _messageManager.AudioMessage(MessageParts));
                     AudioMessage.Start();
                     break;
+
+
                 case "VideoMessage:":
                     Thread VideoMessage = new Thread(() => _messageManager.VideoMessage(MessageParts));
                     VideoMessage.Start();
                     break;
+
+
                 case "SendFriendRequest:":
+                    
+                    if (Instance.DBConnection.isAvailable($"Select * from FriendRequest where SenderID = {int.Parse(MessageParts[1])} and ReceiverID = {int.Parse(MessageParts[2])};"))
+                    {
+                        e.ReplyLine("FriendRequestAlreadySend");
+                    }
+
                     Thread SendFriendRequest = new Thread(() => _messageManager.SendFriendRequest(MessageParts));
                     SendFriendRequest.Start();
                     break;
+
+
                 case "AccpetFriendRequest:":
                     Thread AccpetFriendRequest = new Thread(() => _messageManager.AccpetFriendRequest(MessageParts));
                     AccpetFriendRequest.Start();
                     break;
+
+
                 case "DeclineFriendRequest:":
                     Thread DeclineFriendRequest = new Thread(() => _messageManager.DeclineFriendRequest(MessageParts));
                     DeclineFriendRequest.Start();
                     break;
+
+
                 case "GroupChatTextMessage:":
                     Thread GroupChatTextMessage = new Thread(() => _messageManager.GroupChatTextMessage(MessageParts));
                     GroupChatTextMessage.Start();
                     break;
+
+
                 case "GroupChatAudioMessage:":
                     Thread GroupChatAudioMessage = new Thread(() => _messageManager.GroupChatAudioMessage(MessageParts));
                     GroupChatAudioMessage.Start();
                     break;
+
+
                 case "GroupChatVideoMessage:":
                     Thread GroupChatVideoMessage = new Thread(() => _messageManager.GroupChatVideoMessage(MessageParts));
                     GroupChatVideoMessage.Start();
                     break;
+
+
                 case "ChatLoadRequest:":
                     Thread ChatLoadRequest = new Thread(() => _messageManager.ChatLoadRequest(MessageParts));
                     ChatLoadRequest.Start();

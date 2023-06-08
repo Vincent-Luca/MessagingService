@@ -38,3 +38,20 @@ ChatLoadRequest:
 
 
 Client:
+
+LoginSuccess:
+    "LoginSuccess/UserID"
+LoginFailure:
+    "LoginFailure/ErrorReason"
+ChatLoadResponse:
+    "ChatLoadResponse/SenderID/ReceiverID/MessageType/MessageData"
+NewMessage:
+	"NewMessage/senderID/Message"
+FriendRequestReceived:
+    "FriendRequestReceived/SenderID"
+FriendRequestAccepted:
+    "FriendRequestAccepted/ReceiverID"
+FriendRequestRejected:
+    "FriendRequestRejected/ReceiverID"
+GroupChatLoadResponse:
+    "GroupChatLoadResponse/GroupID/SenderID/MessageType/MessageData"
