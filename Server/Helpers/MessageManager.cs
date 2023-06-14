@@ -18,22 +18,36 @@ namespace Server.Helpers
 
         public void Login(string[] MessageParts)
         {
-            int UserID = int.Parse(ServerMain.Instance.DBConnection.SQLSelect($"Select * from Users where Username = '{MessageParts[1]}' and Password = '{MessageParts[2]}';").Rows[0][0].ToString());
-            
-            ServerMain.Instance.ConnectionManaging.Write($"LoginSuccess/{UserID}", ServerMain.Instance.clients.Find(x => x.UserID == UserID)._client);
+            try
+            {
+                int UserID = int.Parse(ServerMain.Instance.DBConnection.SQLSelect($"Select * from Users where Username = '{MessageParts[1]}' and Password = '{MessageParts[2]}';").Rows[0][0].ToString());
+
+                ServerMain.Instance.ConnectionManaging.Write($"LoginSuccess/{UserID}", ServerMain.Instance.clients.Find(x => x.UserID == UserID)._client);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Login Error: {e.Message}");
+            }
         }
         public void CreateUser(string[] MessageParts)
         {
-            int NewUserID = int.Parse(ServerMain.Instance.DBConnection.SQLSelect("Select TOP(1) UserID from Users order by USerID desc;").Rows[0][0].ToString()) + 1;
-
-            Dictionary<string, dynamic> args = new Dictionary<string, dynamic>()
+            try
             {
-                {"@UID",NewUserID},
-                {"@UN",int.Parse(MessageParts[1])},
-                {"@Pass",int.Parse(MessageParts[2])}
-            };
+                int NewUserID = int.Parse(ServerMain.Instance.DBConnection.SQLSelect("Select TOP(1) UserID from Users order by USerID desc;").Rows[0][0].ToString()) + 1;
 
-            ServerMain.Instance.DBConnection.executenonquery("Insert into Users(UserID,Username,Password) Values(@UID,@UN,@Pass);", args);
+                Dictionary<string, dynamic> args = new Dictionary<string, dynamic>()
+                {
+                    {"@UID",NewUserID},
+                    {"@UN",int.Parse(MessageParts[1])},
+                    {"@Pass",int.Parse(MessageParts[2])}
+                };
+
+                ServerMain.Instance.DBConnection.executenonquery("Insert into Users(UserID,Username,Password) Values(@UID,@UN,@Pass);", args);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Create User Error: {e.Message}");
+            }
         }
 
         public void TextMessage(string[] MessageParts)

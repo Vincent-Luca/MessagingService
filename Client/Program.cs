@@ -14,8 +14,10 @@ namespace Client
         [STAThread]
         static void Main()
         {
+            new ClientApp();
+
             Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
+            //Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Login());
         }
     }

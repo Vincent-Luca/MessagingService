@@ -138,11 +138,14 @@ namespace Server
                         e.ReplyLine("LoginFailure/No_Account_with_this_Username_or_Password");
                         break;
                     }
-                    _clients.Find(x => x.RemoteEndPoint == e.TcpClient.Client.RemoteEndPoint.ToString()).UserID = int.Parse(_dbConnection.SQLSelect($"Select UserID from Users where Username = '{MessageParts[1]}' and Password = '{MessageParts[2]}';").Rows[0][0].ToString());
+
+                    int UserID = int.Parse(_dbConnection.SQLSelect($"Select UserID from Users where Username = '{MessageParts[1]}' and Password = '{MessageParts[2]}';").Rows[0][0].ToString());
+                    _clients.Find(x => x.RemoteEndPoint == e.TcpClient.Client.RemoteEndPoint.ToString()).UserID = UserID;
 
                     Thread Login = new Thread(() => _messageManager.Login(MessageParts));
                     Login.Start();
 
+                    _clients.Find(x => x.RemoteEndPoint == e.TcpClient.Client.RemoteEndPoint.ToString()).UserID = UserID;
                     break;
 
 
