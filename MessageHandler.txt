@@ -4,7 +4,7 @@ Login:
     "Login/Username/Password"
 
 CreateUser:
-    "CreateUser/Username/Password"
+    "CreateUser/Username/DsiplayName/Email/Password"
 
 TextMessage:
     "TextMessage/SenderID/ReceiverID/Message"

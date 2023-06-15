@@ -38,11 +38,14 @@ namespace Server.Helpers
                 Dictionary<string, dynamic> args = new Dictionary<string, dynamic>()
                 {
                     {"@UID",NewUserID},
-                    {"@UN",int.Parse(MessageParts[1])},
-                    {"@Pass",int.Parse(MessageParts[2])}
+                    {"@UN",MessageParts[1]},
+                    {"@Pass",MessageParts[4]},
+                    {"@date",DateTime.Now.ToShortDateString()},
+                    {"@email", MessageParts[3]},
+                    {"@DN", MessageParts[2]}
                 };
 
-                ServerMain.Instance.DBConnection.executenonquery("Insert into Users(UserID,Username,Password) Values(@UID,@UN,@Pass);", args);
+                ServerMain.Instance.DBConnection.executenonquery("Insert into Users(UserID,Username,Password,CreationDate,Email,Display) Values(@UID,@UN,@Pass,@date,@email,@DN);", args);
             }
             catch (Exception e)
             {
