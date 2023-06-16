@@ -206,7 +206,6 @@ namespace Server.Helpers
         /// <exception cref="SqlException"></exception>
         public bool executenonquery(string SQLQuery)
         {
-            _con.BeginTransaction();
             try
             {
                 _command.Parameters.Clear();
@@ -216,12 +215,11 @@ namespace Server.Helpers
 
                 _command.CommandText = SQLQuery;
                 _command.ExecuteNonQuery();
-                _command.Transaction.Commit();
                 return true;
             }
             catch (SqlException ex)
             {
-                _command.Transaction.Rollback();
+                
                 throw new Exception("Error while Finishing Query: " + ex.Message);
             }
         }
@@ -236,7 +234,6 @@ namespace Server.Helpers
         /// <exception cref="SqlException"></exception>
         public bool executenonquery(string SQLQuery, Dictionary<string, dynamic> parameters)
         {
-            _con.BeginTransaction();
             try
             {
                 _command.Parameters.Clear();
@@ -251,12 +248,11 @@ namespace Server.Helpers
 
                 _command.CommandText = SQLQuery;
                 _command.ExecuteNonQuery();
-                _command.Transaction.Commit();
                 return true;
             }
             catch (SqlException ex)
             {
-                _command.Transaction.Rollback();
+                
                 throw new Exception("Error while Finishing Query: " + ex.Message);
             }
         }

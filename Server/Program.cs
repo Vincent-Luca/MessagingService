@@ -13,7 +13,7 @@ namespace Server
             Console.Title = "Messing_Service | Server";
 
             Console.WriteLine($"Starting server application now (v{ServerMain.Version})");
-            ServerMain main = ServerMain.CreateOrGetInstance();
+            ServerMain main = new ServerMain();
         }
     }
 }

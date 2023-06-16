@@ -39,6 +39,8 @@ namespace Server
 
         public ServerMain()
         {
+            _instance = this;
+
             _server = new SimpleTcpServer();
 
             _connectionManaging = new ConnectionManager();
@@ -149,7 +151,7 @@ namespace Server
                     break;
 
 
-                case "CreateUser:":
+                case "CreateUser":
 
                     if (_dbConnection.isAvailable($"Select * from Users where Username = '{MessageParts[1]}';"))
                     {
@@ -176,19 +178,19 @@ namespace Server
                     break;
 
 
-                case "AudioMessage:":
+                case "AudioMessage":
                     Thread AudioMessage = new Thread(() => _messageManager.AudioMessage(MessageParts));
                     AudioMessage.Start();
                     break;
 
 
-                case "VideoMessage:":
+                case "VideoMessage":
                     Thread VideoMessage = new Thread(() => _messageManager.VideoMessage(MessageParts));
                     VideoMessage.Start();
                     break;
 
 
-                case "SendFriendRequest:":
+                case "SendFriendRequest":
                     
                     if (Instance.DBConnection.isAvailable($"Select * from FriendRequest where SenderID = {int.Parse(MessageParts[1])} and ReceiverID = {int.Parse(MessageParts[2])};"))
                     {
@@ -200,37 +202,37 @@ namespace Server
                     break;
 
 
-                case "AccpetFriendRequest:":
+                case "AccpetFriendRequest":
                     Thread AccpetFriendRequest = new Thread(() => _messageManager.AccpetFriendRequest(MessageParts));
                     AccpetFriendRequest.Start();
                     break;
 
 
-                case "DeclineFriendRequest:":
+                case "DeclineFriendRequest":
                     Thread DeclineFriendRequest = new Thread(() => _messageManager.DeclineFriendRequest(MessageParts));
                     DeclineFriendRequest.Start();
                     break;
 
 
-                case "GroupChatTextMessage:":
+                case "GroupChatTextMessage":
                     Thread GroupChatTextMessage = new Thread(() => _messageManager.GroupChatTextMessage(MessageParts));
                     GroupChatTextMessage.Start();
                     break;
 
 
-                case "GroupChatAudioMessage:":
+                case "GroupChatAudioMessage":
                     Thread GroupChatAudioMessage = new Thread(() => _messageManager.GroupChatAudioMessage(MessageParts));
                     GroupChatAudioMessage.Start();
                     break;
 
 
-                case "GroupChatVideoMessage:":
+                case "GroupChatVideoMessage":
                     Thread GroupChatVideoMessage = new Thread(() => _messageManager.GroupChatVideoMessage(MessageParts));
                     GroupChatVideoMessage.Start();
                     break;
 
 
-                case "ChatLoadRequest:":
+                case "ChatLoadRequest":
                     Thread ChatLoadRequest = new Thread(() => _messageManager.ChatLoadRequest(MessageParts));
                     ChatLoadRequest.Start();
                     break;
@@ -259,11 +261,6 @@ namespace Server
             Console.WriteLine("Client disconnected: " + e.Client.RemoteEndPoint);
 
             _clients.Remove(_clients.Find(x => x.RemoteEndPoint == e.Client.RemoteEndPoint.ToString()));
-        }
-
-        public static ServerMain CreateOrGetInstance()
-        {
-            return _instance != null ? _instance : new ServerMain();
         }
     }
 }

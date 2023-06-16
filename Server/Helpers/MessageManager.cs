@@ -33,19 +33,26 @@ namespace Server.Helpers
         {
             try
             {
-                int NewUserID = int.Parse(ServerMain.Instance.DBConnection.SQLSelect("Select TOP(1) UserID from Users order by USerID desc;").Rows[0][0].ToString()) + 1;
+                int NewUserID = 0;
+
+                if (ServerMain.Instance.DBConnection.isAvailable("Select TOP(1) UserID from Users order by UserID desc;"))
+                {
+                    NewUserID = int.Parse(ServerMain.Instance.DBConnection.SQLSelect("Select TOP(1) UserID from Users order by UserID desc;").Rows[0][0].ToString()) + 1;
+                }
+
+                string pass = MessageParts[4].ToString();
 
                 Dictionary<string, dynamic> args = new Dictionary<string, dynamic>()
                 {
                     {"@UID",NewUserID},
                     {"@UN",MessageParts[1]},
-                    {"@Pass",MessageParts[4]},
-                    {"@date",DateTime.Now.ToShortDateString()},
+                    {"@Pass",pass},
+                    {"@date",DateTime.Parse(DateTime.Now.ToShortDateString())},
                     {"@email", MessageParts[3]},
                     {"@DN", MessageParts[2]}
                 };
 
-                ServerMain.Instance.DBConnection.executenonquery("Insert into Users(UserID,Username,Password,CreationDate,Email,Display) Values(@UID,@UN,@Pass,@date,@email,@DN);", args);
+                ServerMain.Instance.DBConnection.executenonquery("Insert into Users(UserID,Username,Password,CreationDate,Email,DisplayName) Values(@UID,@UN,@Pass,@date,@email,@DN);", args);
             }
             catch (Exception e)
             {

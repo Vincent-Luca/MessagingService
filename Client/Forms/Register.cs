@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -35,7 +36,11 @@ namespace Client.Forms
                 return;
             }
 
-            ClientApp.Instance.ConnectionManager.Write($"CreateUser/{txt_username.Text}/{txt_displayname.Text}/{txt_email.Text}/{ClientApp.Instance.Encryption.Hash(txt_pass.Text)}", ClientApp.Instance.Client.TcpClient);
+            string HashPass = ClientApp.Instance.Encryption.Hash(txt_pass.Text);
+            TcpClient Client = ClientApp.Instance.Client.TcpClient;
+
+
+            ClientApp.Instance.ConnectionManager.Write($"CreateUser/{txt_username.Text}/{txt_displayname.Text}/{txt_email.Text}/{HashPass}", Client);
         }
 
         private void btn_passShow_Click(object sender, EventArgs e)

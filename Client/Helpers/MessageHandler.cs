@@ -12,11 +12,7 @@ namespace Client.Helpers
     {
         private string[] MessageParts;
 
-        public MessageHandler(string[] message) 
-        {
-            MessageParts = message;
-            MessageManagment();
-        }
+        
 
         public MessageHandler()
         {
@@ -25,8 +21,8 @@ namespace Client.Helpers
 
         public void MessageManagment(string[] message = null)
         {
-            if (MessageParts == null)
-                MessageParts = message;
+            
+            MessageParts = message;
 
 
             switch (MessageParts[0])

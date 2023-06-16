@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,12 +17,13 @@ namespace Client
 {
     public partial class Login : Form
     {
-        private static Login _instance = new Login();
+        private static Login _instance;
         public static Login Instance => _instance;
         
         public Login()
         {
             InitializeComponent();
+            _instance = this;
         }
 
         private void lbl_forgotpass_Click(object sender, EventArgs e)

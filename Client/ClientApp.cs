@@ -12,8 +12,8 @@ namespace Client
 {
     public class ClientApp
     {
-        private SimpleTcpClient _client = new SimpleTcpClient();
-        public SimpleTcpClient Client => Client;
+        private SimpleTcpClient _client;
+        public SimpleTcpClient Client => _client;
 
         private static ClientApp _instance;
         public static ClientApp Instance => _instance;
@@ -40,6 +40,8 @@ namespace Client
 
             _instance = this;
 
+            _encryption = new Encryption();
+            _client = new SimpleTcpClient();
             _userData = new UserData();
             _messageHandler = new MessageHandler();
             _connectionManager = new ConnectionManager();
