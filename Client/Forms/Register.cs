@@ -64,6 +64,8 @@ namespace Client.Forms
             txt_username.Text = "";
             txt_pass.Text = "";
             txt_confirmpass.Text = "";
+            txt_email.Text = "";
+            txt_displayname.Text = "";
             txt_confirmpass.UseSystemPasswordChar = true;
             txt_confirmpass.UseSystemPasswordChar = true;
         }

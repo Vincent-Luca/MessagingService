@@ -55,7 +55,7 @@ namespace Client
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
-                throw;
+                Environment.Exit(0);
             }
 
             Application.ApplicationExit += (sender, args) =>

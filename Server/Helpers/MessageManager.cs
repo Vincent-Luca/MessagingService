@@ -165,6 +165,12 @@ namespace Server.Helpers
 
             ServerMain.Instance.DBConnection.executenonquery("Insert into Messages(RequestID, SenderID, ReceiverID,Status) Values(@ReID,@SID,@RID,@Status)", args);
         }
+
+        public void LoadFriendsList(string[] MessageParts)
+        {
+
+        }
+
         public void AccpetFriendRequest(string[] MessageParts)
         {
             ServerMain.Instance.DBConnection.executenonquery($"Update FriendRequest where SenderID = {int.Parse(MessageParts[1])} and ReceiverID = {int.Parse(MessageParts[2])} Set Status = 'Accepted';");

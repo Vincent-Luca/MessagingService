@@ -16,5 +16,11 @@ namespace Client.Helpers
         {
         
         }
+
+        public UserData(string Username, int UserID)
+        {
+            this.UserID = UserID;
+            this.Username = Username;
+        }
     }
 }

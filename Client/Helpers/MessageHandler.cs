@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -33,7 +34,7 @@ namespace Client.Helpers
 
                 case "LoginFailure":
 
-                    if (MessageParts[1] == "No_Account_with_this_Username_or_Password")
+                    if (MessageParts[1].Contains("No_Account_with_this_Username_or_Password"))
                     {
                         MessageBox.Show("No Account with this Username and Password found, please try again");
                     }
@@ -41,15 +42,15 @@ namespace Client.Helpers
 
                 case "LoginSuccess":
                     ClientApp.Instance.UserData.UserID = int.Parse(MessageParts[1]);
-                    Login.Instance.loginconfirmed();
+                    Login.Instance.Invoke((MethodInvoker)(() => { Login.Instance.loginconfirmed(); }));
                     break;
 
                 case "CreateAccountFailure":
-                    if (MessageParts[1] == "Account_with_this_Username_already_exists")
+                    if (MessageParts[1].Contains("Account_with_this_Username_already_exists"))
                     {
                         MessageBox.Show("Account with this Username already exists, please choose something else");
                     }
-                    Register.Instance.Failure();
+                    Register.Instance.Invoke((MethodInvoker)(() => { Register.Instance.Failure(); }));
                     break;
 
                 case "CreateAccountSuccess":
