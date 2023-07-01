@@ -1,6 +1,7 @@
 ﻿using SimpleTCP;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -168,7 +169,13 @@ namespace Server.Helpers
 
         public void LoadFriendsList(string[] MessageParts)
         {
+            DataTable Data = ServerMain.Instance.DBConnection.SQLSelect($"Select UserID, Username, CreationDate,DisplayName from Users inner join FriendRequests on Users.UserID = ReceiverID where SenderID = {int.Parse(MessageParts[1])} and Status = 'Accepted';");
 
+            foreach (DataRow User in Data.Rows)
+            {
+                ServerMain.Instance.ConnectionManaging.Write($"Friend/{User[0]}/{User[1]}/{User[2]}/{User[3]}", ServerMain.Instance.clients.Find(x => x.UserID == int.Parse(MessageParts[1]))._client);
+                Thread.Sleep(100);
+            }
         }
 
         public void AccpetFriendRequest(string[] MessageParts)

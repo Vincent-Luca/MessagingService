@@ -16,8 +16,8 @@ namespace Client.Forms
         private static MainMenu _instance;
         public static MainMenu Instance => _instance;
 
-        private List<UserData> _friendlist = new List<UserData>();
-        public List<UserData> Friendlist => _friendlist;
+        private List<FriendsData> _friendlist = new List<FriendsData>();
+        public List<FriendsData> Friendlist => _friendlist;
 
         private bool safeexit = false;
 
@@ -34,10 +34,20 @@ namespace Client.Forms
                 Application.Exit();
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void btn_logout_Click(object sender, EventArgs e)
         {
             safeexit = true;
             Close();
+        }
+
+        private void btn_addfriend_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(txt_addfriend.Text))
+            {
+                return;
+            }
+
+            ClientApp.Instance.ConnectionManager.Write($"", ClientApp.Instance.Client.TcpClient);
         }
     }
 }

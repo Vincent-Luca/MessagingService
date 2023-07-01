@@ -30,9 +30,9 @@
         {
             this.pan_friendlist = new System.Windows.Forms.Panel();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
+            this.btn_logout = new System.Windows.Forms.Button();
+            this.btn_addfriend = new System.Windows.Forms.Button();
+            this.txt_addfriend = new System.Windows.Forms.TextBox();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -53,50 +53,51 @@
             | System.Windows.Forms.AnchorStyles.Left)));
             this.panel1.AutoScroll = true;
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel1.Controls.Add(this.button2);
-            this.panel1.Controls.Add(this.button1);
-            this.panel1.Controls.Add(this.textBox1);
+            this.panel1.Controls.Add(this.btn_logout);
+            this.panel1.Controls.Add(this.btn_addfriend);
+            this.panel1.Controls.Add(this.txt_addfriend);
             this.panel1.Location = new System.Drawing.Point(154, 0);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(648, 68);
             this.panel1.TabIndex = 1;
             // 
-            // textBox1
+            // btn_logout
             // 
-            this.textBox1.BackColor = System.Drawing.Color.Gray;
-            this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBox1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(204)))), ((int)(((byte)(204)))), ((int)(((byte)(204)))));
-            this.textBox1.Location = new System.Drawing.Point(5, 3);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(138, 20);
-            this.textBox1.TabIndex = 0;
+            this.btn_logout.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btn_logout.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btn_logout.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_logout.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(204)))), ((int)(((byte)(204)))), ((int)(((byte)(204)))));
+            this.btn_logout.Location = new System.Drawing.Point(495, 3);
+            this.btn_logout.Name = "btn_logout";
+            this.btn_logout.Size = new System.Drawing.Size(138, 28);
+            this.btn_logout.TabIndex = 3;
+            this.btn_logout.Text = "Logout";
+            this.btn_logout.UseVisualStyleBackColor = true;
+            this.btn_logout.Click += new System.EventHandler(this.btn_logout_Click);
             // 
-            // button1
+            // btn_addfriend
             // 
-            this.button1.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(204)))), ((int)(((byte)(204)))), ((int)(((byte)(204)))));
-            this.button1.Location = new System.Drawing.Point(5, 29);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(138, 28);
-            this.button1.TabIndex = 2;
-            this.button1.Text = "Add Friend";
-            this.button1.UseVisualStyleBackColor = true;
+            this.btn_addfriend.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btn_addfriend.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btn_addfriend.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_addfriend.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(204)))), ((int)(((byte)(204)))), ((int)(((byte)(204)))));
+            this.btn_addfriend.Location = new System.Drawing.Point(5, 29);
+            this.btn_addfriend.Name = "btn_addfriend";
+            this.btn_addfriend.Size = new System.Drawing.Size(138, 28);
+            this.btn_addfriend.TabIndex = 2;
+            this.btn_addfriend.Text = "Add Friend";
+            this.btn_addfriend.UseVisualStyleBackColor = true;
+            this.btn_addfriend.Click += new System.EventHandler(this.btn_addfriend_Click);
             // 
-            // button2
+            // txt_addfriend
             // 
-            this.button2.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(204)))), ((int)(((byte)(204)))), ((int)(((byte)(204)))));
-            this.button2.Location = new System.Drawing.Point(495, 3);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(138, 28);
-            this.button2.TabIndex = 3;
-            this.button2.Text = "Logout";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.txt_addfriend.BackColor = System.Drawing.Color.Gray;
+            this.txt_addfriend.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txt_addfriend.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(204)))), ((int)(((byte)(204)))), ((int)(((byte)(204)))));
+            this.txt_addfriend.Location = new System.Drawing.Point(5, 3);
+            this.txt_addfriend.Name = "txt_addfriend";
+            this.txt_addfriend.Size = new System.Drawing.Size(138, 20);
+            this.txt_addfriend.TabIndex = 0;
             // 
             // MainMenu
             // 
@@ -119,8 +120,8 @@
 
         private System.Windows.Forms.Panel pan_friendlist;
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.TextBox txt_addfriend;
+        private System.Windows.Forms.Button btn_addfriend;
+        private System.Windows.Forms.Button btn_logout;
     }
 }

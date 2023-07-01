@@ -195,8 +195,13 @@ namespace Server
                     if (Instance.DBConnection.isAvailable($"Select * from FriendRequest where SenderID = {int.Parse(MessageParts[1])} and ReceiverID = {int.Parse(MessageParts[2])};"))
                     {
                         e.ReplyLine("FriendRequestAlreadySend");
+                        break;
                     }
-
+                    if (!Instance.DBConnection.isAvailable($"Select * from Users where UserID = {int.Parse(MessageParts[2])};"))
+                    {
+                        e.ReplyLine("NoUserWithThatName");
+                        break;
+                    }
                     Thread SendFriendRequest = new Thread(() => _messageManager.SendFriendRequest(MessageParts));
                     SendFriendRequest.Start();
                     break;

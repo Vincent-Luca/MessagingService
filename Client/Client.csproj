@@ -79,6 +79,7 @@
       <DependentUpon>Register.cs</DependentUpon>
     </Compile>
     <Compile Include="Helpers\Encryption.cs" />
+    <Compile Include="Helpers\FriendsData.cs" />
     <Compile Include="Helpers\MessageHandler.cs" />
     <Compile Include="Helpers\UserData.cs" />
     <Compile Include="Forms\Login.cs">

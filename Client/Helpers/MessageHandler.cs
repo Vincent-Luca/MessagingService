@@ -57,6 +57,10 @@ namespace Client.Helpers
                     Register.Instance.ConfirmCreateAccount();
                     break;
 
+                case "Friend":
+                    Forms.MainMenu.Instance.Friendlist.Add(new FriendsData(int.Parse(MessageParts[0]), MessageParts[1], MessageParts[3], DateTime.Parse(MessageParts[2])));
+                    break;
+
                 default:
                     break;
             }
